@@ -62,11 +62,18 @@ void loadUsersFromFile() {
 // --- Simulation Runners ---
 
 void run2G() {
-    IO::printLine("\n=== 2G (GSM) ANALYSIS ===");
+    IO::printLine("\n+==========================================+");
+    IO::printLine("|             2G (GSM) ANALYSIS            |");
+    IO::printLine("+------------------------------------------+");
+
     ThreadedTower2G tower;
-    IO::print("Total Capacity (Users): ");
+
+    IO::print("| Total Capacity (Users): ");
     IO::printInt(tower.calculateTotalCapacity());
-    IO::printLine("");
+    int spaces = 15; // adjust based on digit count if needed
+    for(int i=0; i<spaces; i++) IO::print(" ");
+    IO::printLine("|");
+
 
     if (!loadedUsers.empty()) {
         tower.simulateWithLoadedUsers(loadedUsers);
@@ -75,12 +82,19 @@ void run2G() {
     }
 }
 
+
 void run3G() {
-    IO::printLine("\n=== 3G (UMTS) ANALYSIS ===");
+    IO::printLine("\n+==========================================+");
+    IO::printLine("|             3G (UMTS) ANALYSIS           |");
+    IO::printLine("+------------------------------------------+");
+
     ThreadedTower3G tower;
-    IO::print("Total Capacity (Users): ");
+
+    IO::print("| Total Capacity (Users): ");
     IO::printInt(tower.calculateTotalCapacity());
-    IO::printLine("");
+    int spaces = 14; // adjust based on digit count if needed
+    for(int i=0; i<spaces; i++) IO::print(" ");
+    IO::printLine("|");
 
     if (!loadedUsers.empty()) {
         tower.simulateWithLoadedUsers(loadedUsers);
@@ -89,24 +103,31 @@ void run3G() {
     }
 }
 
-void run4G() {
-    IO::printLine("\n=== 4G (LTE) ANALYSIS ===");
-    ThreadedTower4G tower;
-    
-    int capacity = tower.calculateTotalCapacity();
-    IO::print("Total Capacity (Users): ");
-    IO::printInt(capacity);
-    IO::printLine("");
 
-    // Core Calculation Logic
-    int msgsPerUser = 10; 
+void run4G() {
+    IO::printLine("\n+==========================================+");
+    IO::printLine("|             4G (LTE) ANALYSIS            |");
+    IO::printLine("+------------------------------------------+");
+
+    ThreadedTower4G tower;
+    int capacity = tower.calculateTotalCapacity();
+
+    IO::print("| Total Capacity (Users): ");
+    IO::printInt(tower.calculateTotalCapacity());
+    int spaces = 12; // adjust based on digit count if needed
+    for(int i=0; i<spaces; i++) IO::print(" ");
+    IO::printLine("|");
+
+    // Core Calculation Logic (kept as-is)
+    int msgsPerUser = 10;
     long totalMessages = (long)capacity * msgsPerUser;
     int coreCapacity = 100000;
     int coresNeeded = (totalMessages / coreCapacity) + 1;
 
-    IO::print("Cellular Cores Required for Max Capacity: ");
+    IO::print("| Cores Required (max capacity): ");
     IO::printInt(coresNeeded);
-    IO::printLine("");
+    IO::printLine("         |");
+    IO::printLine("+------------------------------------------+");
 
     if (!loadedUsers.empty()) {
         tower.simulateWithLoadedUsers(loadedUsers);
@@ -114,13 +135,20 @@ void run4G() {
         IO::printLine("No users loaded.");
     }
 }
+
 
 void run5G() {
-    IO::printLine("\n=== 5G (NR) ANALYSIS ===");
+    IO::printLine("\n+==========================================+");
+    IO::printLine("|              5G (NR) ANALYSIS            |");
+    IO::printLine("+------------------------------------------+");
+
     ThreadedTower5G tower;
-    IO::print("Total Capacity (Users): ");
+
+    IO::print("| Total Capacity (Users): ");
     IO::printInt(tower.calculateTotalCapacity());
-    IO::printLine("");
+    int spaces = 13; // adjust based on digit count if needed
+    for(int i=0; i<spaces; i++) IO::print(" ");
+    IO::printLine("|");
 
     if (!loadedUsers.empty()) {
         tower.simulateWithLoadedUsers(loadedUsers);
@@ -128,6 +156,7 @@ void run5G() {
         IO::printLine("No users loaded.");
     }
 }
+
 
 void runFullSimulation() {
     IO::printLine("\n==========================================");
@@ -155,16 +184,23 @@ int main() {
     bool running = true;
 
     while (running) {
-        IO::printLine("\n==========================================");
-        IO::printLine("   CELLULAR NETWORK SIMULATOR (MENU)");
-        IO::printLine("==========================================");
-        IO::printLine("1. Load Users from File");
-        IO::printLine("2. Run 2G Simulation (GSM)");
-        IO::printLine("3. Run 3G Simulation (UMTS)");
-        IO::printLine("4. Run 4G Simulation (LTE)");
-        IO::printLine("5. Run 5G Simulation (NR)");
-        IO::printLine("6. Run Full Simulation (All Generations)");
-        IO::printLine("7. Exit");
+        IO::printLine("\n+==========================================+");
+        IO::printLine("|      CELLULAR NETWORK SIMULATOR (MENU)   |");
+        IO::printLine("+==========================================+");
+        IO::printLine("| 1. Load Users from File                  |");
+        IO::printLine("+------------------------------------------+");
+        IO::printLine("| 2. Run 2G Simulation (GSM)               |");
+        IO::printLine("+------------------------------------------+");
+        IO::printLine("| 3. Run 3G Simulation (UMTS)              |");
+        IO::printLine("+------------------------------------------+");
+        IO::printLine("| 4. Run 4G Simulation (LTE)               |");
+        IO::printLine("+------------------------------------------+");
+        IO::printLine("| 5. Run 5G Simulation (NR)                |");
+        IO::printLine("+------------------------------------------+");
+        IO::printLine("| 6. Run Full Simulation (All Generations) |");
+        IO::printLine("+------------------------------------------+");
+        IO::printLine("| 7. Exit                                  |");
+        IO::printLine("+==========================================+");
         IO::print("Select Option: ");
 
         long len = IO::readLine(buffer, 32);

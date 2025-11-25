@@ -17,7 +17,10 @@ public:
     }
 
     void simulateWithLoadedUsers(const Vector<UserDevice>& users) {
-        IO::printLine("Mapping loaded users to frequency channels...");
+        IO::printLine("+------------------------------------------+");
+        IO::printLine("| Mapping loaded users to frequency        |");
+        IO::printLine("| channels...                              |");
+        IO::printLine("+------------------------------------------+");
         
         int numChannels = (int)(totalBandwidthKHz / channelWidthKHz);
         channels.clear();
@@ -49,14 +52,18 @@ public:
         }
         
         // 3. Print Summary
-        IO::print("Simulation Result: Accepted ");
+        IO::print("| Simulation Result: Accepted ");
         IO::printInt(accepted);
-        IO::print(" users. Dropped ");
+        IO::printLine(" users.    |");
+        IO::print("| Dropped ");
         IO::printInt(dropped);
-        IO::printLine(" users.");
-        
-        // 4. Print Detailed Bandwidth Allocation (The requested logic)
-        IO::printLine("\n--- BANDWIDTH ALLOCATION REPORT ---");
+        IO::printLine(" users.                         |");
+        IO::printLine("+------------------------------------------+");
+
+        // 4. Print Detailed Bandwidth Allocation (users list unchanged)
+        IO::printLine("\n==========================================");
+        IO::printLine("       BANDWIDTH ALLOCATION REPORT");
+        IO::printLine("==========================================");
         
         for(int i=0; i<numChannels; ++i) {
             if (!channels[i].isEmpty()) {
@@ -74,6 +81,7 @@ public:
                 
                 // Print users in this band
                 channels[i].printUsers();
+                IO::printLine("--------------");
             }
         }
         IO::printLine("-----------------------------------");
