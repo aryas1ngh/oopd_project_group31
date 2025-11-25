@@ -137,7 +137,7 @@ make clean
 
 For users on **macOS** (Intel or Apple Silicon M1/M2/M3). The macOS system calls and assembly syntax differ from Linux, so we use the files in the `macos/` directory.
 
-####🛠️ Build
+#### 🛠️ Build
 1. Navigate to the `macos` folder from the project root:
 ~~~text
 cd macos
@@ -148,7 +148,7 @@ make
 ~~~
 *This uses the macOS-compatible `syscall.s` and links correctly for Darwin systems.*
 
-####▶️ Run
+#### ▶️ Run
 Run the generated executable:
 ~~~text
 ./sim_debug
@@ -228,8 +228,8 @@ Channel 1 (Antenna 1):
 
 ---
 
-
-
+###  Acknowledgement
+We have used open-source codes and LLM's for designing our project.
 
 
 
