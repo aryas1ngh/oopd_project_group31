@@ -8,7 +8,7 @@ Vector<UserDevice> loadedUsers;
 
 // --- Helper Functions ---
 
-// Manual string-to-int parser (replaces std::stoi)
+// Manual string-to-int parser
 int parseInt(const char* str) {
     int val = 0;
     int i = 0;
@@ -64,24 +64,20 @@ void loadUsersFromFile() {
 void run2G() {
     IO::printLine("\n=== 2G (GSM) ANALYSIS ===");
     ThreadedTower2G tower;
-    
-    // Question: How many user devices can be supported?
     IO::print("Total Capacity (Users): ");
     IO::printInt(tower.calculateTotalCapacity());
     IO::printLine("");
 
-    if (loadedUsers.empty()) {
-        IO::printLine("No users loaded. Please load data first to see allocation.");
-    } else {
-        // Question: Identify users occupying specific frequency
+    if (!loadedUsers.empty()) {
         tower.simulateWithLoadedUsers(loadedUsers);
+    } else {
+        IO::printLine("No users loaded. Please load data first.");
     }
 }
 
 void run3G() {
     IO::printLine("\n=== 3G (UMTS) ANALYSIS ===");
     ThreadedTower3G tower;
-    
     IO::print("Total Capacity (Users): ");
     IO::printInt(tower.calculateTotalCapacity());
     IO::printLine("");
@@ -102,17 +98,13 @@ void run4G() {
     IO::printInt(capacity);
     IO::printLine("");
 
-    // Question: Identify the number of cellular cores needed
-    // Assuming 1 Core can handle 100,000 messages
+    // Core Calculation Logic
     int msgsPerUser = 10; 
     long totalMessages = (long)capacity * msgsPerUser;
     int coreCapacity = 100000;
     int coresNeeded = (totalMessages / coreCapacity) + 1;
 
-    IO::print("Total Potential Messages: ");
-    IO::printInt(totalMessages);
-    IO::printLine("");
-    IO::print("Cellular Cores Required (to support full potential): ");
+    IO::print("Cellular Cores Required for Max Capacity: ");
     IO::printInt(coresNeeded);
     IO::printLine("");
 
@@ -126,7 +118,6 @@ void run4G() {
 void run5G() {
     IO::printLine("\n=== 5G (NR) ANALYSIS ===");
     ThreadedTower5G tower;
-    
     IO::print("Total Capacity (Users): ");
     IO::printInt(tower.calculateTotalCapacity());
     IO::printLine("");
@@ -136,6 +127,25 @@ void run5G() {
     } else {
         IO::printLine("No users loaded.");
     }
+}
+
+void runFullSimulation() {
+    IO::printLine("\n==========================================");
+    IO::printLine("   STARTING FULL NETWORK SIMULATION");
+    IO::printLine("==========================================");
+    
+    if (loadedUsers.empty()) {
+        IO::printLine("WARNING: No users loaded. Simulation will be empty.");
+    }
+
+    run2G();
+    run3G();
+    run4G();
+    run5G();
+
+    IO::printLine("\n==========================================");
+    IO::printLine("   FULL SIMULATION COMPLETE");
+    IO::printLine("==========================================");
 }
 
 // --- Main Entry Point ---
@@ -153,7 +163,8 @@ int main() {
         IO::printLine("3. Run 3G Simulation (UMTS)");
         IO::printLine("4. Run 4G Simulation (LTE)");
         IO::printLine("5. Run 5G Simulation (NR)");
-        IO::printLine("6. Exit");
+        IO::printLine("6. Run Full Simulation (All Generations)");
+        IO::printLine("7. Exit");
         IO::print("Select Option: ");
 
         long len = IO::readLine(buffer, 32);
@@ -167,7 +178,8 @@ int main() {
             case 3: run3G(); break;
             case 4: run4G(); break;
             case 5: run5G(); break;
-            case 6: 
+            case 6: runFullSimulation(); break;
+            case 7: 
                 running = false; 
                 IO::printLine("Exiting...");
                 break;

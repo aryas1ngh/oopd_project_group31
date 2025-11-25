@@ -19,18 +19,18 @@ public:
         return false;
     }
 
-    // New helper to avoid printing empty channels
     bool isEmpty() const {
         return connectedUsers.empty();
     }
 
     void printUsers() const {
-        // Only print the loop content (header is handled by caller for better formatting)
+        IO::print("    Users: ");
         for (unsigned long i = 0; i < connectedUsers.size(); ++i) {
-            IO::print("    [User ID: ");
+            IO::print("[");
             IO::printInt(connectedUsers[i].getID());
-            IO::printLine("]");
+            IO::print("] ");
         }
+        IO::printLine(""); // One newline at the very end
     }
 
 private:
