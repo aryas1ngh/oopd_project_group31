@@ -16,7 +16,6 @@ public:
         }
     }
 
-    // --- THIS IS THE MISSING FUNCTION ---
     void simulateWithLoadedUsers(const Vector<UserDevice>& users) {
         IO::printLine("Mapping loaded users to frequency channels...");
         
@@ -34,19 +33,14 @@ public:
         int dropped = 0;
 
         for(unsigned long i=0; i<users.size(); ++i) {
-            // Calculate which channel this user belongs to
             int channelIndex = (i / usersPerChannel);
-            
-            // Handle antenna reuse (parallel capacity)
             int effectiveChannel = channelIndex % numChannels;
             
-            // Check absolute capacity limits
             if (channelIndex >= (numChannels * antennaCount)) {
                 dropped++;
                 continue;
             }
 
-            // Attempt to add user
             if(channels[effectiveChannel].addUser(users[i])) {
                 accepted++;
             } else {
@@ -54,15 +48,38 @@ public:
             }
         }
         
-        // 3. Print Results
+        // 3. Print Summary
         IO::print("Simulation Result: Accepted ");
         IO::printInt(accepted);
         IO::print(" users. Dropped ");
         IO::printInt(dropped);
-        IO::printLine(" users (Capacity Full).");
+        IO::printLine(" users.");
         
-        // 4. Calculate Core Overhead
-        long totalMsgs = accepted * msgPerUser;
+        // 4. Print Detailed Bandwidth Allocation (The requested logic)
+        IO::printLine("\n--- BANDWIDTH ALLOCATION REPORT ---");
+        
+        for(int i=0; i<numChannels; ++i) {
+            if (!channels[i].isEmpty()) {
+                // Calculate Frequency Band
+                float startFreq = i * channelWidthKHz;
+                float endFreq = startFreq + channelWidthKHz;
+                
+                IO::print("Channel ");
+                IO::printInt(i + 1);
+                IO::print(" (");
+                IO::printFloat(startFreq, 1);
+                IO::print("-");
+                IO::printFloat(endFreq, 1);
+                IO::printLine(" kHz):");
+                
+                // Print users in this band
+                channels[i].printUsers();
+            }
+        }
+        IO::printLine("-----------------------------------");
+
+        // 5. Calculate Core Overhead
+        long totalMsgs = (long)accepted * (long)msgPerUser;
         IO::print("Core Overhead Generated: ");
         IO::printFloat(core.calculateOverhead(totalMsgs));
         IO::printLine(" units.");
@@ -72,7 +89,6 @@ protected:
     Vector<std::thread*> workerThreads;
     std::mutex channelMutex;
 
-    // Legacy method for random simulation (required by ThreadedTowers.hpp classes)
     void simulateConcurrentUsers(int numChannels, int usersPerChannel, int idStart) {
         channels.clear();
         for (int i = 0; i < numChannels; ++i) {

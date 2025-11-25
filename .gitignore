@@ -1,0 +1,5 @@
+# ignore outputs and binaries
+sim*
+*.o
+macos/sim*
+macos/*.o

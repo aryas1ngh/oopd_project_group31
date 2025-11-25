@@ -19,12 +19,17 @@ public:
         return false;
     }
 
+    // New helper to avoid printing empty channels
+    bool isEmpty() const {
+        return connectedUsers.empty();
+    }
+
     void printUsers() const {
-        IO::printLine("Users in this frequency channel:");
+        // Only print the loop content (header is handled by caller for better formatting)
         for (unsigned long i = 0; i < connectedUsers.size(); ++i) {
-            IO::print("  User ID: ");
+            IO::print("    [User ID: ");
             IO::printInt(connectedUsers[i].getID());
-            IO::printLine("");
+            IO::printLine("]");
         }
     }
 
